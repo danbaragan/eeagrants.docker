@@ -1,0 +1,3 @@
+docker-compose.yml
+deploy/web/docker.env
+deploy/secret.env

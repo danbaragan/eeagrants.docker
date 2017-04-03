@@ -1,0 +1,43 @@
+version: '2'
+services:
+  web:
+    image: ${EDW_BUILD_DOCKERHUB}/eeagrants_web:$EDW_BUILD_VER
+    ports:
+      - "127.0.0.1:8000:8000"
+    command: ./manage.py runserver 0.0.0.0:8000
+    env_file:
+      - deploy/web/docker.env
+      - deploy/secret.env
+    volumes_from:
+      - webpack
+    volumes:
+      - webroot:/home/web/webroot
+    depends_on:
+      - webpack
+
+  webpack:
+    image: ${EDW_BUILD_DOCKERHUB}/eeagrants_webpack:$EDW_BUILD_VER
+    command: ["webpack_entrypoint.sh"]
+    ports:
+      - "127.0.0.1:2992:2992"
+    env_file:
+      - deploy/webpack/docker.env
+      - deploy/secret.env
+    volumes:
+      - webpack:/home/web/build
+
+  db:
+    image: postgres:9.6
+    env_file:
+      - deploy/db/docker.env
+      - deploy/secret.env
+    volumes:
+      - db:/var/lib/postgresql/data
+
+volumes:
+  webroot:
+    driver: local
+  webpack:
+    driver: local
+  db:
+    driver: local

@@ -1,0 +1,17 @@
+version: '2'
+services:
+  web:
+    image: danbaragan/eeagrants_web
+    command: ./manage.py runserver 0.0.0.0:8000
+    tty: true
+    stdin_open: true
+    environment:
+      - DEBUG=True
+
+  webpack:
+    image: danbaragan/eeagrants_webpack
+    volumes:
+      - ../dataviz:/home/web/eeagrants
+      - /home/web/eeagrants/node_modules
+    environment:
+      - NODE_ENV=development

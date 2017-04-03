@@ -1,0 +1,6 @@
+.env*
+!.env.sample
+
+deploy/secret.env
+
+docker-compose.override.yml
